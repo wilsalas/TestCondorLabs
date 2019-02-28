@@ -1,0 +1,37 @@
+{
+  "name": "prueba_wilfan_salas",
+  "version": "1.0.0",
+  "description": "Prueba de desarrollo",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "nodemon server/src/index.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "build": "cd client && npm run build && serve -s build",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+  },
+  "keywords": [
+    "Mongodb",
+    "Express",
+    "React",
+    "Nodejs"
+  ],
+  "author": "WilfanSalas",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.0",
+    "mongoose": "^5.4.16",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.10"
+  }
+}
