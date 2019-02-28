@@ -11,8 +11,8 @@ code {
 }
 
 .L_R {
-  text-align: center;
   background-color: #282c34;
+  text-align: center;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

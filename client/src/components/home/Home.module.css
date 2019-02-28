@@ -1,0 +1,28 @@
+.menubar {
+    background: #282c34;
+    height: 100vh;
+}
+
+.nav-item:hover {
+    background: gainsboro !important;
+}
+
+input[type=search] {
+    color: #d2c5c5 !important;
+}
+
+input[type=search]::placeholder {
+    color: #d2c5c5;
+}
+
+a {
+    color: darkgrey !important
+}
+
+a:hover {
+    border-bottom: 1px solid darkgrey !important;
+}
+
+.userActive {
+    color: #36bb35
+}

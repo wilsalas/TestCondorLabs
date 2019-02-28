@@ -9,7 +9,7 @@ export default props => (
         <Row>
             <Col md={4} className="offset-md-4">
                 <Card>
-                    <CardHeader><h1><i className="fas fa-user"></i> {props.title} </h1></CardHeader>
+                    <CardHeader><h1><i className="fas fa-user-circle"></i> {props.title} </h1></CardHeader>
                     <CardBody>
                         <Form onSubmit={props.handleEvent}>
                             {props.title !== "Login" &&

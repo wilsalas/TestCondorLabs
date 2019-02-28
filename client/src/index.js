@@ -3,15 +3,40 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/app/App';
 import Register from './components/register/Register';
+import Home from './components/home/Home';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+
+
+/*function authenticated app */
+const Authenticated = (type, session = localStorage.getItem('fakeAuth')) => {
+    return type === 'public' && session !== null ? <Redirect to={'/home'} /> :
+        type === 'private' && session === null ? <Redirect to={'/'} /> :
+            type === 'compare' ? session : null;
+}
+
+/*function logout app */
+const Logout = () => {
+    localStorage.removeItem('fakeAuth');
+    window.location.reload();
+}
+
+/*function render components app */
+const RouteProvider = ({ component: Component, ...objectPath }) => (
+    <Route  {...objectPath} render={props => <Component {...props} fakeAuth={Authenticated} logout={Logout} />} />
+);
+
 
 // Config routes app
 ReactDOM.render(
     <Router>
         <div>
-            <Route exact path="/" component={App}></Route>
-            <Route path="/register" component={Register}></Route>
+            <Switch>
+                <RouteProvider exact path='/' component={App} />
+                <RouteProvider path='/register' component={Register} />
+                <RouteProvider path='/home' component={Home} />
+                <Route render={() => <Redirect to="/" />} />
+            </Switch >
         </div>
     </Router>
     , document.getElementById('root'));

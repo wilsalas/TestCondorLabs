@@ -3,7 +3,6 @@ import FetchData from './Fetch';
 const FormRegister = e => {
     e.preventDefault();
     let { name, email, password, gender, profile } = e.target;
-
     FetchData('/auth/register', {
         name: name.value,
         email: email.value,
@@ -11,7 +10,7 @@ const FormRegister = e => {
         gender: gender.value,
         profile: profile.value
     }, 'post', data => {
-        console.log(data);
+        alert(data.response);
     });
 }
 
@@ -22,9 +21,13 @@ const FormLogin = e => {
         email: email.value,
         password: password.value
     }, 'post', data => {
-        console.log(data);
+        if (data.status === 200) {
+            localStorage.setItem('fakeAuth', btoa(data.response));
+            window.location.href = "/home";
+        } else {
+            alert(data.response);
+        }
     });
-
 }
 
 
