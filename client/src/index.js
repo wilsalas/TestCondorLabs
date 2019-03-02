@@ -11,14 +11,16 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 /*function authenticated app */
 const Authenticated = (type, session = localStorage.getItem('fakeAuth')) => {
     return type === 'public' && session !== null ? <Redirect to={'/home'} /> :
-        type === 'private' && session === null ? <Redirect to={'/'} /> :
-            type === 'compare' ? session : null;
+           type === 'private' && session === null ? <Redirect to={'/'} /> :
+           type === 'compare' ? session : null;
 }
 
 /*function logout app */
 const Logout = () => {
-    localStorage.removeItem('fakeAuth');
-    window.location.reload();
+    if(window.confirm("Are you sure you want to log out?")){
+        localStorage.removeItem('fakeAuth');
+        window.location.reload();
+    }
 }
 
 /*function render components app */

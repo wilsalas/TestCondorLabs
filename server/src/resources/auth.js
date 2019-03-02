@@ -44,7 +44,7 @@ passport.use('login', new LocalStrategy.Strategy({
         if (!user.comparePassword(passwordPassport)) {
             return done(...PassportDone(403, "Incorrect password."));
         }
-        return done(...PassportDone(200, "", `Bearer ${jwt.sign(user._id.toJSON(), process.env.SECRETKEY)}`));
+        return done(...PassportDone(200, "", `Bearer ${jwt.sign({ _id: `${user._id}` }, process.env.SECRETKEY)}`));
     } catch (error) {
         return done(...PassportDone(500, "An error has occurred try again please."));
     }
@@ -56,7 +56,7 @@ passport.use('jwt', new Strategy({
     secretOrKey: process.env.SECRETKEY
 }, async (token, done) => {
     try {
-        let user = await userModel.findOne().where({ _id: token._id });
+        let user = await userModel.findOne().where({ _id: token._id }).select("_id name email profile");
         return done(...PassportDone(200, "", user ? user : false));
     } catch (err) {
         return done(...PassportDone(500, "An error has occurred try again please."));
@@ -66,23 +66,34 @@ passport.use('jwt', new Strategy({
 /**PassportDone message */
 const PassportDone = (status, errors = null, user = false) => [false, user, { status, errors }];
 
-/**Callback type passport authenticate */
-module.exports = (nameAuth, req, res) => {
+/**Callback type passport authenticate user */
+const AuthenticateUser = (nameAuth, req, res) => {
     passport.authenticate(nameAuth, { session: false }, (errors, user, info) => {
         if (info.message === "Missing credentials" && !errors) {
             return res.status(401).json({
                 status: 401,
-                response: [{
-                    msg: nameAuth === "jwt" ?
-                        "Unauthorized user" :
-                        "Please enter an email and a password"
-                }]
+                response: "Please enter an email and a password"
             });
         }
         if (!errors) {
-            // let listErrors = Array.isArray(info.errors) ? info.errors : [{ msg: info.errors }],
             let response = info.status !== 200 ? info.errors : user;
             return res.status(info.status).json({ status: info.status, response });
         }
     })(req, res);
 }
+
+
+/**Callback passport autheticate  routes jwt*/
+const AuthenticateJWT = (req, res, cb) => {
+    passport.authenticate('jwt', { session: false }, (err, user, info) => {
+        if (err || !user) {
+            return res.status(401).json({ status: 401, response: "Unauthorized user 11" });
+        }
+        cb({ status: info.status, response: user });
+    })(req, res)
+}
+
+module.exports = {
+    AuthenticateUser,
+    AuthenticateJWT
+};

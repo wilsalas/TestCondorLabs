@@ -1,7 +1,8 @@
 const { Router } = require("express"),
     router = Router(),
-    { LoginUsers, RegisterUsers } = require("../controllers/users");
+    { GetDataUsers, LoginUsers, RegisterUsers } = require("../controllers/users");
 
+router.get('/auth/getusers', GetDataUsers)
 router.post('/auth/login', LoginUsers);
 router.post('/auth/register', RegisterUsers);
 

@@ -1,4 +1,10 @@
-.menubar {
+.menubar1 {
+    background: #2d323c;
+    height: 100vh;
+    text-align: center;
+}
+
+.menubar2 {
     background: #282c34;
     height: 100vh;
 }
@@ -19,10 +25,22 @@ a {
     color: darkgrey !important
 }
 
+hr {
+    background: darkgrey !important
+}
+
 a:hover {
     border-bottom: 1px solid darkgrey !important;
 }
 
 .userActive {
     color: #36bb35
+}
+
+textarea{
+    resize: none;
+}
+.contentBody{
+    height: 60vh;
+     overflow-y: scroll; 
 }
