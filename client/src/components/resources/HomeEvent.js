@@ -1,22 +1,32 @@
 import FetchData from './Fetch';
+import io from 'socket.io-client';
+import Store from './store/Store';
+import { GetCountListUser } from './store/ActionCreators';
 
 const GetDataUser = cb => FetchData("/auth/getusers", {}, "get", data => cb(data));
 
 (async () => {
-    var socket = io('http://localhost:5000/');
-    socket.on('news', function (data) {
-      console.log(data);
-      socket.emit('my other event', { my: 'data' });
+    const socket = io('http://localhost:5000/');
+
+    // on connection to server, ask for user's name with an anonymous callback
+    socket.on('connect', () => {
+        // call the server-side function 'adduser' and send one parameter (value of prompt)
+        socket.emit('newuser', "wil");
     });
 
-    ListUsers();
+
+    socket.on('listusers', data => {
+        console.log("datos" + data);
+        //Store.dispatch(GetCountListUser(data))
+    });
+
+
 })();
 
-function ListUsers() {
-    console.log("HOla mundo");
-}
 
 
 export default {
     GetDataUser
 };
+
+

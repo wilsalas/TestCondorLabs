@@ -19,7 +19,7 @@ const Authenticated = (type, session = localStorage.getItem('fakeAuth')) => {
 const Logout = () => {
     if(window.confirm("Are you sure you want to log out?")){
         localStorage.removeItem('fakeAuth');
-        window.location.reload();
+        window.location.href="/";
     }
 }
 

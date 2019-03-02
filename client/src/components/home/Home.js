@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import {
-    Button, CardTitle, Container, Col, Row, Nav, NavItem, NavLink, Input, CardImg, Card
+    Button, Badge, CardTitle, Container, Col, Row, Nav, NavItem, NavLink, Input, CardImg, Card
 
 } from 'reactstrap';
 import HomeEvent from '../resources/HomeEvent';
 import styles from './Home.module.css';
 import Navigation from '../layouts/Navigation';
 import ListMessage from '../layouts/ListMessage';
+import Store from '../resources/store/Store'; 
 
 class Home extends Component {
     constructor(props) {
@@ -15,11 +16,18 @@ class Home extends Component {
             _id: "",
             name: "",
             email: "",
-            profile: ""
+            profile: "",
+            countUsers:0
         }
     }
 
     componentWillMount() {
+
+        Store.subscribe(()=>{
+            this.setState({countUsers: Store.getState().count})
+        })
+
+
         /* if you are authenticated then you can access  */
         if (this.props.fakeAuth('compare'))
             HomeEvent.GetDataUser(data => this.setState(data.response));
@@ -68,7 +76,13 @@ class Home extends Component {
                             </NavItem>
                         </Nav>
                         <hr />
-                        <h3>List Users</h3>
+                        <h3>List Users
+                            <small>
+                                <Badge className="float-right" color="success">
+                                    {this.state.countUsers}
+                                </Badge>
+                            </small>
+                        </h3>
                         <Input
                             className="float-right"
                             type="search"
