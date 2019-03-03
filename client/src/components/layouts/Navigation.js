@@ -26,7 +26,7 @@ class Navigation extends Component {
         return (
             <div>
                 <Navbar color="light" light expand="md">
-                    <h4>#Channel1</h4>
+                    <h4>#Group1</h4>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import Form from '../layouts/Form';
 import UserEvent from '../resources/UserEvent';
 

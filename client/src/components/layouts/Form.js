@@ -3,6 +3,7 @@ import {
     Button, Container, Col, Card, CardHeader, CardBody, Form, FormGroup, Input, Row
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import styles from '../app/App.module.css';
 //component used to log in and register
 export default props => (
     <Container>
@@ -41,7 +42,7 @@ export default props => (
                             <FormGroup>
                                 <Button outline color="success" size="lg" block>{props.title}</Button>
                                 <small>
-                                    <Link to={props.path.uri} color="info">{props.path.text}</Link>
+                                    <Link className={styles.enlace} to={props.path.uri} color="info">{props.path.text}</Link>
                                 </small>
                             </FormGroup>
                         </Form>

@@ -22,7 +22,7 @@ input[type=search]::placeholder {
 }
 
 a {
-    color: darkgrey !important
+    color: white !important
 }
 
 hr {
@@ -37,10 +37,29 @@ a:hover {
     color: #4CAF50
 }
 
-textarea{
+textarea {
     resize: none;
 }
-.contentBody{
+
+.contentBody {
     height: 60vh;
-     overflow-y: scroll; 
+    overflow-y: auto;
+}
+
+.contentListGroup {
+    height: 30vh;
+    overflow-y: auto;
+    background: #282c34;
+}
+
+.contentListUsers {
+    height: 40vh;
+    overflow-y: auto;
+    background: #282c34;
+}
+
+@media screen and (max-width:899px) {
+    .contentListUsers {
+        height: 33vh;
+    }
 }

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import {
-    Button, Badge, CardTitle, Container, Col, Row, Nav, NavItem, NavLink, Input, CardImg, Card
+    Button, Badge, CardTitle, Container, Col, Row, Input, CardImg, Card, Nav
 
 } from 'reactstrap';
-import HomeEvent from '../resources/HomeEvent';
 import styles from './Home.module.css';
+import Store from '../resources/store/Store';
+import HomeEvent from '../resources/HomeEvent';
 import Navigation from '../layouts/Navigation';
 import ListMessage from '../layouts/ListMessage';
-import Store from '../resources/store/Store'; 
+import { ListGroup, ListUsers } from '../layouts/ListView';
 
 class Home extends Component {
     constructor(props) {
@@ -17,14 +18,16 @@ class Home extends Component {
             name: "",
             email: "",
             profile: "",
-            countUsers:0
+            countUsers: 0,
+            listUsers: []
         }
     }
 
     componentWillMount() {
 
-        Store.subscribe(()=>{
-            this.setState({countUsers: Store.getState().count})
+        Store.subscribe(() => {
+
+            this.setState({ countUsers: Store.getState().countUsers, listUsers: Store.getState().listUsers })
         })
 
 
@@ -59,26 +62,26 @@ class Home extends Component {
                     </Col>
                     <Col md={2} className={`text-white ${styles.menubar2}`} >
                         <br />
-                        <h3>Channels
+                        <h3>Groups
                             <Button size="sm" className="float-right" outline color="secondary">
                                 <i className="fas fa-plus-circle fa-2x"></i>
                             </Button>
                         </h3>
-                        <Nav vertical>
-                            <NavItem>
-                                <NavLink href="#">Channel1</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink href="#">Channel2</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink href="#">Channel3</NavLink>
-                            </NavItem>
-                        </Nav>
-                        <hr />
+                        <Row >
+                            <Col md={12} className="mt-2">
+                                <Card body className={styles.contentListGroup}>
+                                    <Nav vertical >
+                                        {new Array(2).fill(undefined).map((data, i) => (
+                                            <ListGroup key={i}></ListGroup>
+                                        ))}
+                                    </Nav>
+                                </Card>
+                            </Col>
+                        </Row>
+                        <br />
                         <h3>List Users
                             <small>
-                                <Badge className="float-right" color="success">
+                                <Badge className="float-right" color="warning">
                                     {this.state.countUsers}
                                 </Badge>
                             </small>
@@ -90,11 +93,17 @@ class Home extends Component {
                             placeholder="Search users"
                         />
                         <br /><br /><br />
-                        <Nav vertical>
-                            <NavLink href="#"><i className={`fas fa-circle ${styles.userActive}`}></i> User1</NavLink>
-                            <NavLink href="#"><i className="fas fa-circle"></i> User2</NavLink>
-                            <NavLink href="#"><i className="fas fa-circle"></i> User3</NavLink>
-                        </Nav>
+                        <Row>
+                            <Col md={12} >
+                                <Card body className={styles.contentListUsers}>
+                                    <Nav vertical >
+                                        {this.state.listUsers.map((data, i) => (
+                                            <ListUsers key={i} name={data} userActive={styles.userActive}> </ListUsers>
+                                        ))}
+                                    </Nav>
+                                </Card>
+                            </Col>
+                        </Row>
                     </Col>
                     <Col md={9}>
                         <Navigation></Navigation>

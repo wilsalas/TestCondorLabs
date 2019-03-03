@@ -5,11 +5,12 @@ const reducer = (state, action) => {
         case 'COUNT_LIST_TO_USER':
             return {
                 ...state,
-                count: action.count
+                countUsers: action.countUsers,
+                listUsers: action.listUsers
             };
         default:
             return state;
     }
 }
 
-export default createStore(reducer, { count: 0 });
+export default createStore(reducer, { countUsers: 0, listUsers: [] });
