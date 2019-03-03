@@ -1,8 +1,7 @@
-const GetCountListUser = data => {
+const GetCountListUser = listUsers => {
     return {
         type: "COUNT_LIST_TO_USER",
-        countUsers: data.length,
-        listUsers: data
+        listUsers
     }
 }
 

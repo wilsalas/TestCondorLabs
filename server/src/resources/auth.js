@@ -87,7 +87,7 @@ const AuthenticateUser = (nameAuth, req, res) => {
 const AuthenticateJWT = (req, res, cb) => {
     passport.authenticate('jwt', { session: false }, (err, user, info) => {
         if (err || !user) {
-            return res.status(401).json({ status: 401, response: "Unauthorized user 11" });
+            return res.status(401).json({ status: 401, response: "Unauthorized user" });
         }
         cb({ status: info.status, response: user });
     })(req, res)

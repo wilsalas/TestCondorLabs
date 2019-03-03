@@ -8,6 +8,7 @@ import Store from '../resources/store/Store';
 import HomeEvent from '../resources/HomeEvent';
 import Navigation from '../layouts/Navigation';
 import ListMessage from '../layouts/ListMessage';
+import NewGroup from '../layouts/NewGroup';
 import { ListGroup, ListUsers } from '../layouts/ListView';
 
 class Home extends Component {
@@ -19,21 +20,37 @@ class Home extends Component {
             email: "",
             profile: "",
             countUsers: 0,
-            listUsers: []
+            listUsers: [],
+            listGroup: [{
+                name: "Group1",
+                type: "All",
+                relationship: { user1: "", user2: "" }
+            }]
         }
     }
 
     componentWillMount() {
-
         Store.subscribe(() => {
+            this.setState(state => {
+                return (
+                    state.listGroup.push({ name: "Group2", type: "Private" }),
+                    state.countUsers = Store.getState().listUsers.listname.length,
+                    state.listUsers = {
+                        data: Store.getState().listUsers.listname,
+                        email: Store.getState().listUsers.email
+                    }
+                );
+            });
+        });
 
-            this.setState({ countUsers: Store.getState().countUsers, listUsers: Store.getState().listUsers })
-        })
+
 
 
         /* if you are authenticated then you can access  */
         if (this.props.fakeAuth('compare'))
             HomeEvent.GetDataUser(data => this.setState(data.response));
+
+
     }
 
     render() {
@@ -63,16 +80,14 @@ class Home extends Component {
                     <Col md={2} className={`text-white ${styles.menubar2}`} >
                         <br />
                         <h3>Groups
-                            <Button size="sm" className="float-right" outline color="secondary">
-                                <i className="fas fa-plus-circle fa-2x"></i>
-                            </Button>
+                            <NewGroup newgroup={(e) => HomeEvent.NewGroup(e)}></NewGroup>
                         </h3>
                         <Row >
                             <Col md={12} className="mt-2">
                                 <Card body className={styles.contentListGroup}>
                                     <Nav vertical >
-                                        {new Array(2).fill(undefined).map((data, i) => (
-                                            <ListGroup key={i}></ListGroup>
+                                        {this.state.listGroup.map((data, i) => (
+                                            <ListGroup key={i} data={data}></ListGroup>
                                         ))}
                                     </Nav>
                                 </Card>
@@ -96,9 +111,9 @@ class Home extends Component {
                         <Row>
                             <Col md={12} >
                                 <Card body className={styles.contentListUsers}>
-                                    <Nav vertical >
-                                        {this.state.listUsers.map((data, i) => (
-                                            <ListUsers key={i} name={data} userActive={styles.userActive}> </ListUsers>
+                                   <Nav vertical >
+                                        {this.state.listUsers.data.map((data, i) => (
+                                            <ListUsers key={i} name={data} email={3} userActive={styles.userActive}> </ListUsers>
                                         ))}
                                     </Nav>
                                 </Card>

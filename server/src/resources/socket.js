@@ -10,11 +10,11 @@ module.exports = io => {
             // store the room name in the socket session for this client
             socket.room = 'group1';
             // add the client's username to the global list
-            usersOnline[username.name] = username.name;
+            usersOnline[username.name] = username.email;
             // send client to channel1 1
             socket.join(socket.room);
             //send list user connected 
-            io.sockets.emit('listusers', usersOnline);
+            io.sockets.emit('listusers', usersOnline, username.email);
             // echo to client they've connected
             socket.emit('updatechat', 'SERVER', 'you have connected to room1');
         })
