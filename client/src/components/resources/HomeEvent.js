@@ -29,15 +29,17 @@ if (localStorage.getItem("fakeAuth") !== null) {
 //get the information from a user's database
 const GetDataUser = cb => FetchData("/auth/getusers", {}, "get", data => cb(data));
 //create a new group app
-const NewGroup = (e, data = "") => {
+const NewGroup = (e = undefined, data = "") => {
+    let infoNewGroup = undefined;
     if (data === "") {
         e.preventDefault();
-        FetchData("/events/newgroup", { namegroup: e.target.group.value }, "post", data => {
-            data.status === 200 ? socket.emit("groupregister") : alert(data.message);
-        });
+        infoNewGroup = { name: e.target.group.value }
     } else {
-        console.log("Hola mundo");
+        infoNewGroup = data;
     }
+    FetchData("/events/newgroup", infoNewGroup, "post", data => {
+        data.status === 200 ? socket.emit("groupregister") : alert(data.message);
+    });
 }
 //convert a text string to a user object
 const ConvertInfoUsers = data => {

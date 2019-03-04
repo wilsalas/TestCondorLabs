@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     Button, Popover, PopoverHeader, PopoverBody,
     Form, FormGroup, Input
 } from 'reactstrap';
 
-class NewGroup extends React.Component {
+class NewGroup extends Component {
     constructor(props) {
         super(props);
 
@@ -30,8 +30,8 @@ class NewGroup extends React.Component {
 
                 <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
                     <PopoverHeader>Create a new Group</PopoverHeader>
-                    <PopoverBody>
-                        <Form onSubmit={this.props.newgroup.bind(this)}>
+                    <PopoverBody onMouseLeave={() => this.setState({ popoverOpen: false })}>
+                        <Form onSubmit={this.props.newgroup.bind(this)}  >
                             <FormGroup>
                                 <Input type="text" required name="group" placeholder="Title of the new group" />
                             </FormGroup>

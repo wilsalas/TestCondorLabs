@@ -20,6 +20,7 @@ class Home extends Component {
             email: "",
             profile: "",
             countUsers: 0,
+            countGroups: 1,
             listUsers: [],
             listGroups: []
         }
@@ -33,7 +34,8 @@ class Home extends Component {
                 this.setState({
                     listUsers: Store.getState().listUsers,
                     countUsers: Store.getState().listUsers.length,
-                    listGroups: Store.getState().listGroups
+                    listGroups: Store.getState().listGroups,
+                    countGroups: Store.getState().listGroups.length
                 })
             });
         }
@@ -66,7 +68,12 @@ class Home extends Component {
                     </Col>
                     <Col md={2} className={`text-white ${styles.menubar2}`} >
                         <br />
-                        <h3>Groups
+                        <h3 >Groups
+                            <small className="ml-2">
+                                <Badge color="warning">
+                                    {this.state.countGroups}
+                                </Badge>
+                            </small>
                             <NewGroup newgroup={(e) => HomeEvent.NewGroup(e)}></NewGroup>
                         </h3>
                         <Row >
@@ -101,7 +108,20 @@ class Home extends Component {
                                 <Card body className={styles.contentListUsers}>
                                     <Nav vertical >
                                         {this.state.listUsers.map((data, i) => (
-                                            <ListUsers key={i} name={data.name} email={data.email} userActive={styles.userActive}> </ListUsers>
+                                            <ListUsers key={i}
+                                                newgroup={() => HomeEvent.NewGroup(undefined, {
+                                                    name: `(${this.state.name}-${data.name})`,
+                                                    type: "Private",
+                                                    relationship: {
+                                                        user1: this.state.email,
+                                                        user2: data.email
+                                                    }
+                                                })}
+                                                name={data.name}
+                                                email={data.email}
+                                                userActive={styles.userActive}
+                                            >
+                                            </ListUsers>
                                         ))}
                                     </Nav>
                                 </Card>

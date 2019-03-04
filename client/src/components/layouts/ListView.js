@@ -1,13 +1,15 @@
 import React from 'react';
 import {
-    Badge, NavItem, NavLink
+    Badge, Button, NavItem, NavLink
 } from 'reactstrap';
 
 const ListGroup = props => (
     <div>
         <NavItem>
-            <NavLink href="#">{props.data.name} &nbsp;
-                <Badge color={props.data.type === "All" ? 'primary' : 'warning'}>{props.data.type}</Badge>
+            <NavLink>
+                <Button outline color="secondary" size="sm" block>{props.data.name} &nbsp;
+                <Badge color={props.data.type === "All" ? 'info' : 'warning'}>{props.data.type}</Badge>
+                </Button>
             </NavLink>
         </NavItem>
     </div>
@@ -15,7 +17,11 @@ const ListGroup = props => (
 
 const ListUsers = props => (
     <div>
-        <NavLink href="#"><i className={`fas fa-circle ${props.userActive}`}></i>&nbsp; {props.name}</NavLink>
+        <NavLink>
+            <Button onClick={props.newgroup.bind(this)} outline color="secondary" size="sm" block>
+                <i className={`fas fa-circle ${props.userActive}`}></i>&nbsp; {props.name}
+            </Button>
+        </NavLink>
     </div>
 );
 
