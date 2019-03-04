@@ -1,8 +1,6 @@
 import { createStore } from 'redux';
 
-const reducer = (state, action) => {
-    console.log(action);
-    
+const reducer = (state, action) => {    
     switch (action.type) {
         case 'COUNT_LIST_TO_USER':
             return {
@@ -14,4 +12,4 @@ const reducer = (state, action) => {
     }
 }
 
-export default createStore(reducer, { countUsers: 0, listUsers: [] });
+export default createStore(reducer, { listUsers: [] });

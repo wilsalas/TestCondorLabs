@@ -30,17 +30,15 @@ class Home extends Component {
     }
 
     componentWillMount() {
+
+        this.setState(state => state.listGroup.push({ name: "Group2", type: "Private" }))
+
+
+
         Store.subscribe(() => {
-            this.setState(state => {
-                return (
-                    state.listGroup.push({ name: "Group2", type: "Private" }),
-                    state.countUsers = Store.getState().listUsers.listname.length,
-                    state.listUsers = {
-                        data: Store.getState().listUsers.listname,
-                        email: Store.getState().listUsers.email
-                    }
-                );
-            });
+          
+            console.log(Store.getState());
+            
         });
 
 
@@ -54,6 +52,7 @@ class Home extends Component {
     }
 
     render() {
+        
         return (
             <Container fluid>
                 {this.props.fakeAuth('private')}
@@ -111,11 +110,11 @@ class Home extends Component {
                         <Row>
                             <Col md={12} >
                                 <Card body className={styles.contentListUsers}>
-                                   <Nav vertical >
-                                        {this.state.listUsers.data.map((data, i) => (
-                                            <ListUsers key={i} name={data} email={3} userActive={styles.userActive}> </ListUsers>
+                                    {/* <Nav vertical >
+                                         {this.state.listUsers.map((data, i) => (
+                                            <ListUsers key={i} name={data} email={this.state.listEmailUser} userActive={styles.userActive}> </ListUsers>
                                         ))}
-                                    </Nav>
+                                    </Nav> */}
                                 </Card>
                             </Col>
                         </Row>

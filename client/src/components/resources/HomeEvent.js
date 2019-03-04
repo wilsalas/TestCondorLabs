@@ -31,15 +31,19 @@ if (localStorage.getItem("fakeAuth") !== null) {
             }))
         });
 
-
-        socket.on('listusers', (data, email) => Store.dispatch(GetCountListUser({
-            listname: Object.keys(data),
-            email
-        })));
-        socket.on('updateusers', (data, email) => Store.dispatch(GetCountListUser({
-            listname: Object.keys(data),
-            email
-        })));
+        socket.on('listusers', data => {
+            let infoUser = [], dataUser = "";
+            Object.values(data).map(info => {
+                dataUser = info.split("-");
+                infoUser.push({
+                    name: dataUser[0],
+                    email: dataUser[1],
+                    profile: dataUser[2]
+                });
+            });
+            Store.dispatch(GetCountListUser(infoUser))
+        });
+        socket.on('updateusers', data => Store.dispatch(GetCountListUser(data)));
     })();
 }
 
