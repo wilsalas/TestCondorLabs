@@ -24,7 +24,7 @@ module.exports = io => {
             // remove the username from global usernames list
             delete usersOnline[socket.data];
             // update list of users in chat, client-side
-            io.sockets.emit('updateusers', usersOnline);
+            io.sockets.emit('updatelistusers', usersOnline);
         });
 
     });

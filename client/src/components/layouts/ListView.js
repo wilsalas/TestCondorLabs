@@ -15,7 +15,7 @@ const ListGroup = props => (
 
 const ListUsers = props => (
     <div>
-        <NavLink href="#"><i className={`fas fa-circle ${props.userActive}`}></i>&nbsp; {props.name +""+ props.email}</NavLink>
+        <NavLink href="#"><i className={`fas fa-circle ${props.userActive}`}></i>&nbsp; {props.name}</NavLink>
     </div>
 );
 

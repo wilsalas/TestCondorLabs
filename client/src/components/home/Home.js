@@ -33,15 +33,12 @@ class Home extends Component {
 
         this.setState(state => state.listGroup.push({ name: "Group2", type: "Private" }))
 
-
-
         Store.subscribe(() => {
-          
-            console.log(Store.getState());
-            
+            this.setState({
+                listUsers: Store.getState().listUsers,
+                countUsers: Store.getState().listUsers.length
+            })
         });
-
-
 
 
         /* if you are authenticated then you can access  */
@@ -52,7 +49,7 @@ class Home extends Component {
     }
 
     render() {
-        
+
         return (
             <Container fluid>
                 {this.props.fakeAuth('private')}
@@ -110,11 +107,11 @@ class Home extends Component {
                         <Row>
                             <Col md={12} >
                                 <Card body className={styles.contentListUsers}>
-                                    {/* <Nav vertical >
-                                         {this.state.listUsers.map((data, i) => (
-                                            <ListUsers key={i} name={data} email={this.state.listEmailUser} userActive={styles.userActive}> </ListUsers>
+                                    <Nav vertical >
+                                        {this.state.listUsers.map((data, i) => (
+                                            <ListUsers key={i} name={data.name} email={data.email} userActive={styles.userActive}> </ListUsers>
                                         ))}
-                                    </Nav> */}
+                                    </Nav>
                                 </Card>
                             </Col>
                         </Row>

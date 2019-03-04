@@ -10,7 +10,12 @@ const FormRegister = e => {
         gender: gender.value,
         profile: profile.value
     }, 'post', data => {
-        alert(data.response);
+        if (data.status === 200) {
+            alert(data.response);
+            window.location.href = "/";
+        } else {
+            alert(data.response);
+        }
     });
 }
 
