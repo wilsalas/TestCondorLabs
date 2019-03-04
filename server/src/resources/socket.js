@@ -1,5 +1,6 @@
-module.exports = io => {
+const groupModel = require("../models/groups");
 
+module.exports = io => {
     // usernames which are currently connected to the chat
     var usersOnline = {};
     io.sockets.on('connection', socket => {
@@ -18,7 +19,10 @@ module.exports = io => {
             // echo to client they've connected
             socket.emit('updatechat', 'SERVER', 'you have connected to room1');
         })
-
+        //bring the group list the first time
+        GetGroup(io);
+        //refresh group list
+        socket.on("groupregister", () => GetGroup(io));
         // when the user disconnects.. perform this
         socket.on('disconnect', function () {
             // remove the username from global usernames list
@@ -29,6 +33,9 @@ module.exports = io => {
 
     });
 
-
+    //get the list of groups
+    const GetGroup = async io => {
+        io.sockets.emit("getgroups", await groupModel.find())
+    }
 
 }

@@ -21,31 +21,22 @@ class Home extends Component {
             profile: "",
             countUsers: 0,
             listUsers: [],
-            listGroup: [{
-                name: "Group1",
-                type: "All",
-                relationship: { user1: "", user2: "" }
-            }]
+            listGroups: []
         }
     }
 
     componentWillMount() {
-
-        this.setState(state => state.listGroup.push({ name: "Group2", type: "Private" }))
-
-        Store.subscribe(() => {
-            this.setState({
-                listUsers: Store.getState().listUsers,
-                countUsers: Store.getState().listUsers.length
-            })
-        });
-
-
         /* if you are authenticated then you can access  */
-        if (this.props.fakeAuth('compare'))
+        if (this.props.fakeAuth('compare')) {
             HomeEvent.GetDataUser(data => this.setState(data.response));
-
-
+            Store.subscribe(() => {
+                this.setState({
+                    listUsers: Store.getState().listUsers,
+                    countUsers: Store.getState().listUsers.length,
+                    listGroups: Store.getState().listGroups
+                })
+            });
+        }
     }
 
     render() {
@@ -82,7 +73,8 @@ class Home extends Component {
                             <Col md={12} className="mt-2">
                                 <Card body className={styles.contentListGroup}>
                                     <Nav vertical >
-                                        {this.state.listGroup.map((data, i) => (
+                                        <ListGroup data={{ type: "All", name: "Group1" }}></ListGroup>
+                                        {this.state.listGroups.map((data, i) => (
                                             <ListGroup key={i} data={data}></ListGroup>
                                         ))}
                                     </Nav>
