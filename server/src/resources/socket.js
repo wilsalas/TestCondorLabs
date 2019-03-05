@@ -47,9 +47,13 @@ module.exports = io => {
         })
 
         //ask for messages and return the list of messages depending on the name of the group
-        socket.on("askformessages", async data => socket.emit("loadmessages", await messageModel.find().where({
-            groupname: data
-        })));
+        socket.on("askformessages", async groupname =>
+            //issue messages only to those within the current group
+            io.sockets.in(groupname).emit("loadmessages",
+                await messageModel.find()
+                    .where({ groupname })
+                    .sort({ createdAt: -1 }))
+        );
 
         // when the user disconnects.. perform this
         socket.on('disconnect', () => {

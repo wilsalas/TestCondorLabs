@@ -1,5 +1,6 @@
 const { AuthenticateJWT } = require("../resources/auth"),
-    groupModel = require("../models/groups");
+    groupModel = require("../models/groups"),
+    messageModel = require("../models/messages");
 
 //It works to create new groups and add to the database
 const NewGroup = (req, res) => AuthenticateJWT(req, res, async () => {
@@ -12,8 +13,18 @@ const NewGroup = (req, res) => AuthenticateJWT(req, res, async () => {
     } catch (error) {
         res.status(500).json({ status: 500, message: "An error has occurred try again please." });
     }
-})
+});
+
+const NewMessage = (req, res) => AuthenticateJWT(req, res, async () => {
+    try {
+        await new messageModel(req.body).save();
+        res.status(200).json({ status: 200, message: "new message created successfully" })
+    } catch (error) {
+        res.status(500).json({ status: 500, message: "An error has occurred try again please." });
+    }
+});
 
 module.exports = {
-    NewGroup
+    NewGroup,
+    NewMessage
 }

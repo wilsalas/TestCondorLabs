@@ -23,11 +23,13 @@ class Home extends Component {
             groupsCount: 1,
             users: [],
             groups: [],
-            groupname: ""
+            groupname: "",
+            message: "",
+            messages: []
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         /* if you are authenticated then you can access  */
         if (this.props.fakeAuth('compare')) {
             //fill list variables of users and groups
@@ -38,7 +40,8 @@ class Home extends Component {
                     usersCount: Store.getState().users.length,
                     groups: Store.getState().groups,
                     groupsCount: document.getElementsByClassName("groupsNav")[0].childElementCount,
-                    groupname: Store.getState().groupname
+                    groupname: Store.getState().groupname,
+                    messages: Store.getState().messages
                 });
             });
         }
@@ -46,6 +49,8 @@ class Home extends Component {
 
 
     render() {
+
+
         return (
             <Container fluid>
                 {this.props.fakeAuth('private')}
@@ -157,14 +162,25 @@ class Home extends Component {
                         <Row className="mt-1 mb-2">
                             <Col md={12} >
                                 <Card body className={styles.bodyContent}>
-                                    {new Array(50).fill(undefined).map((data, i) => (
-                                        <Message name={data} key={i}></Message>
+                                    {this.state.messages.map((data, i) => (
+                                        <Message data={data} key={i}></Message>
                                     ))}
                                 </Card>
                             </Col>
                             <Col md={12} >
-                                <Input type="textarea" name="message" placeholder="Write a new message" /> <br />
-                                <Button color="primary" size="lg" block>Send Message</Button>
+                                <Input
+                                    onChange={e => this.setState({ message: e.target.value })}
+                                    type="textarea"
+                                    name="message"
+                                    placeholder="Write a new message" /> <br />
+                                <Button onClick={() => HomeEvent.NewMessage({
+                                    groupname: this.state.groupname,
+                                    username: this.state.name,
+                                    profile: this.state.profile,
+                                    message: this.state.message
+                                })} color="primary" size="lg" block>
+                                    Send Message
+                                </Button>
                             </Col>
                         </Row>
                     </Col>

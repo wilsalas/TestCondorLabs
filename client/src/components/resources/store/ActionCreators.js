@@ -10,13 +10,20 @@ const Groups = groups => ({
 });
 
 //action to get the name of the current group
-const GroupName = groupname =>({
-    type:"GROUP_NAME",
+const GroupName = groupname => ({
+    type: "GROUP_NAME",
     groupname
+});
+
+//action for loading messages
+const LoadMessages = messages => ({
+    type: "LOAD_MESSAGE",
+    messages
 });
 
 export {
     Users,
     Groups,
-    GroupName
+    GroupName,
+    LoadMessages
 }

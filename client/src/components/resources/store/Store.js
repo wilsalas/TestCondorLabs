@@ -19,6 +19,12 @@ const reducer = (state, action) => {
                 ...state,
                 groupname: action.groupname
             };
+
+        case 'LOAD_MESSAGE':
+            return {
+                ...state,
+                messages: action.messages
+            };
         default:
             return state;
     }
@@ -27,5 +33,6 @@ const reducer = (state, action) => {
 export default createStore(reducer, {
     users: [],
     groups: [],
-    groupname: ""
+    groupname: "",
+    messages: []
 });

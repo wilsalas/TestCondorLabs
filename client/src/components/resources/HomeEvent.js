@@ -1,7 +1,7 @@
 import FetchData from './Fetch';
 import io from 'socket.io-client';
 import Store from './store/Store';
-import { Users, Groups, GroupName } from './store/ActionCreators';
+import { Users, Groups, GroupName, LoadMessages } from './store/ActionCreators';
 
 //start the connection of clients with server
 const socket = io('http://localhost:5000/');
@@ -25,18 +25,15 @@ if (localStorage.getItem("fakeAuth") !== null) {
 
     socket.on("updatelocalchat", data => {
         Store.dispatch(GroupName(data.group));
-        socket.emit("askformessages", data.group)
+        Askformessages(data.group);
     });
 
     socket.on("updatechat", data => {
         console.log(data);
 
     })
-
-    socket.on("loadmessages", data => {
-        console.log(data);
-
-    })
+    //loading messages app store
+    socket.on("loadmessages", messages => Store.dispatch(LoadMessages(messages)));
 
 
 }
@@ -55,10 +52,21 @@ const NewGroup = (e = undefined, data = "") => {
         data.status === 200 ? socket.emit("groupregister") : alert(data.message);
     });
 }
+
 //get the group change
 const SwitchGroup = data => socket.emit("switchgroup", data);
 
+const Askformessages = groupname => socket.emit("askformessages", groupname)
+
+//create a new message
 const NewMessage = data => {
+    if (data.message !== "") {
+        FetchData("/events/newmessage", data, "post", info => {
+            Askformessages(data.groupname)
+        });
+    } else {
+        alert("the message field can not be empty");
+    }
 }
 
 //convert a text string to a user object
