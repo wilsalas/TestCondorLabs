@@ -68,7 +68,7 @@ class Home extends Component {
                     </Col>
                     <Col md={2} className={`text-white ${styles.menubar2}`} >
                         <br />
-                        <h3 >Groups
+                        <h3 >New Groups
                             <small className="ml-2">
                                 <Badge color="warning">
                                     {this.state.countGroups}
@@ -79,11 +79,17 @@ class Home extends Component {
                         <Row >
                             <Col md={12} className="mt-2">
                                 <Card body className={styles.contentListGroup}>
+                                    {/* check the list of public and private groups */}
                                     <Nav vertical >
                                         <ListGroup data={{ type: "All", name: "Group1" }}></ListGroup>
-                                        {this.state.listGroups.map((data, i) => (
-                                            <ListGroup key={i} data={data}></ListGroup>
-                                        ))}
+                                        {this.state.listGroups.map((data, i) =>
+                                            data.type === "All" ?
+                                                <ListGroup key={i} data={data}></ListGroup>
+                                                : (data.relationship.user1 === this.state.email ||
+                                                    data.relationship.user2 === this.state.email) ?
+                                                    <ListGroup key={i} data={data}></ListGroup>
+                                                    : ""
+                                        )}
                                     </Nav>
                                 </Card>
                             </Col>
