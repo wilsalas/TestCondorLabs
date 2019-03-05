@@ -3,15 +3,21 @@ import { createStore } from 'redux';
 //create storage of global states in the application
 const reducer = (state, action) => {
     switch (action.type) {
-        case 'COUNT_LIST_TO_USER':
+        case 'USERS':
             return {
                 ...state,
-                listUsers: action.listUsers
+                users: action.users
             };
-        case 'LIST_GROUPS':
+        case 'GROUPS':
             return {
                 ...state,
-                listGroups: action.listGroups
+                groups: action.groups
+            };
+
+        case 'GROUP_NAME':
+            return {
+                ...state,
+                groupname: action.groupname
             };
         default:
             return state;
@@ -19,6 +25,7 @@ const reducer = (state, action) => {
 }
 
 export default createStore(reducer, {
-    listUsers: [],
-    listGroups: []
+    users: [],
+    groups: [],
+    groupname: ""
 });

@@ -7,9 +7,9 @@ import styles from './Home.module.css';
 import Store from '../resources/store/Store';
 import HomeEvent from '../resources/HomeEvent';
 import Navigation from '../layouts/Navigation';
-import ListMessage from '../layouts/ListMessage';
+import Message from '../layouts/Message';
 import NewGroup from '../layouts/NewGroup';
-import { ListGroup, ListUsers } from '../layouts/ListView';
+import { Groups, Users } from '../layouts/View';
 
 class Home extends Component {
     constructor(props) {
@@ -19,30 +19,33 @@ class Home extends Component {
             name: "",
             email: "",
             profile: "",
-            countUsers: 0,
-            countGroups: 1,
-            listUsers: [],
-            listGroups: []
+            usersCount: 0,
+            groupsCount: 1,
+            users: [],
+            groups: [],
+            groupname: ""
         }
     }
 
     componentWillMount() {
         /* if you are authenticated then you can access  */
         if (this.props.fakeAuth('compare')) {
+            //fill list variables of users and groups
             HomeEvent.GetDataUser(data => this.setState(data.response));
             Store.subscribe(() => {
                 this.setState({
-                    listUsers: Store.getState().listUsers,
-                    countUsers: Store.getState().listUsers.length,
-                    listGroups: Store.getState().listGroups,
-                    countGroups: Store.getState().listGroups.length
-                })
+                    users: Store.getState().users,
+                    usersCount: Store.getState().users.length,
+                    groups: Store.getState().groups,
+                    groupsCount: document.getElementsByClassName("groupsNav")[0].childElementCount,
+                    groupname: Store.getState().groupname
+                });
             });
         }
     }
 
-    render() {
 
+    render() {
         return (
             <Container fluid>
                 {this.props.fakeAuth('private')}
@@ -68,26 +71,37 @@ class Home extends Component {
                     </Col>
                     <Col md={2} className={`text-white ${styles.menubar2}`} >
                         <br />
-                        <h3 >New Groups
+                        <h3 >Groups
                             <small className="ml-2">
                                 <Badge color="warning">
-                                    {this.state.countGroups}
+                                    {this.state.groupsCount}
                                 </Badge>
                             </small>
                             <NewGroup newgroup={(e) => HomeEvent.NewGroup(e)}></NewGroup>
                         </h3>
                         <Row >
                             <Col md={12} className="mt-2">
-                                <Card body className={styles.contentListGroup}>
+                                <Card body className={styles.groupContent}>
                                     {/* check the list of public and private groups */}
-                                    <Nav vertical >
-                                        <ListGroup data={{ type: "All", name: "Group1" }}></ListGroup>
-                                        {this.state.listGroups.map((data, i) =>
+                                    <Nav vertical className="groupsNav">
+                                        <Groups
+                                            groupchange={() => HomeEvent.SwitchGroup("group1")}
+                                            data={{ type: "All", name: "group1" }}>
+                                        </Groups>
+                                        {this.state.groups.map((data, i) =>
                                             data.type === "All" ?
-                                                <ListGroup key={i} data={data}></ListGroup>
+                                                <Groups
+                                                    groupchange={() => HomeEvent.SwitchGroup(data.name)}
+                                                    key={i}
+                                                    data={data}>
+                                                </Groups>
                                                 : (data.relationship.user1 === this.state.email ||
                                                     data.relationship.user2 === this.state.email) ?
-                                                    <ListGroup key={i} data={data}></ListGroup>
+                                                    <Groups
+                                                        groupchange={() => HomeEvent.SwitchGroup(data.name)}
+                                                        key={i}
+                                                        data={data}>
+                                                    </Groups>
                                                     : ""
                                         )}
                                     </Nav>
@@ -95,10 +109,10 @@ class Home extends Component {
                             </Col>
                         </Row>
                         <br />
-                        <h3>List Users
+                        <h3>Users
                             <small>
                                 <Badge className="float-right" color="warning">
-                                    {this.state.countUsers}
+                                    {this.state.usersCount}
                                 </Badge>
                             </small>
                         </h3>
@@ -111,23 +125,27 @@ class Home extends Component {
                         <br /><br /><br />
                         <Row>
                             <Col md={12} >
-                                <Card body className={styles.contentListUsers}>
+                                <Card body className={styles.usersContent}>
+                                    {/* send information of a new private group */}
                                     <Nav vertical >
-                                        {this.state.listUsers.map((data, i) => (
-                                            <ListUsers key={i}
-                                                newgroup={() => HomeEvent.NewGroup(undefined, {
-                                                    name: `(${this.state.name}-${data.name})`,
-                                                    type: "Private",
-                                                    relationship: {
-                                                        user1: this.state.email,
-                                                        user2: data.email
-                                                    }
-                                                })}
+                                        {this.state.users.map((data, i) => (
+                                            <Users key={i}
+                                                newgroup={() =>
+                                                    data.email !== this.state.email ?
+                                                        HomeEvent.NewGroup(undefined, {
+                                                            name: `(${this.state.name}-${data.name})`,
+                                                            type: "Private",
+                                                            relationship: {
+                                                                user1: this.state.email,
+                                                                user2: data.email
+                                                            }
+                                                        }) : false
+                                                }
                                                 name={data.name}
                                                 email={data.email}
                                                 userActive={styles.userActive}
                                             >
-                                            </ListUsers>
+                                            </Users>
                                         ))}
                                     </Nav>
                                 </Card>
@@ -135,12 +153,12 @@ class Home extends Component {
                         </Row>
                     </Col>
                     <Col md={9}>
-                        <Navigation></Navigation>
+                        <Navigation groupname={this.state.groupname}></Navigation>
                         <Row className="mt-1 mb-2">
                             <Col md={12} >
-                                <Card body className={styles.contentBody}>
+                                <Card body className={styles.bodyContent}>
                                     {new Array(50).fill(undefined).map((data, i) => (
-                                        <ListMessage name={data} key={i}></ListMessage>
+                                        <Message name={data} key={i}></Message>
                                     ))}
                                 </Card>
                             </Col>

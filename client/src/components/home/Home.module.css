@@ -29,7 +29,6 @@ hr {
     background: darkgrey !important
 }
 
-
 .userActive {
     color: #4CAF50
 }
@@ -38,25 +37,25 @@ textarea {
     resize: none;
 }
 
-.contentBody {
+.bodyContent {
     height: 60vh;
     overflow-y: auto;
 }
 
-.contentListGroup {
+.groupContent {
     height: 30vh;
     overflow-y: auto;
     background: #282c34;
 }
 
-.contentListUsers {
+.usersContent {
     height: 40vh;
     overflow-y: auto;
     background: #282c34;
 }
 
 @media screen and (max-width:899px) {
-    .contentListUsers {
+    .usersContent {
         height: 33vh;
     }
 }

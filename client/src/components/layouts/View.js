@@ -3,19 +3,19 @@ import {
     Badge, Button, NavItem, NavLink
 } from 'reactstrap';
 
-const ListGroup = props => (
+const Groups = props => (
     <div>
         <NavItem>
             <NavLink>
-                <Button outline color="secondary" size="sm" block>{props.data.name} &nbsp;
-                <Badge color={props.data.type === "All" ? 'info' : 'warning'}>{props.data.type}</Badge>
+                <Button onClick={props.groupchange.bind(this)} outline color="secondary" size="sm" block>{props.data.name} &nbsp;
+                <Badge color={props.data.type === "All" ? 'primary' : 'danger'}>{props.data.type}</Badge>
                 </Button>
             </NavLink>
         </NavItem>
     </div>
 );
 
-const ListUsers = props => (
+const Users = props => (
     <div>
         <NavLink>
             <Button onClick={props.newgroup.bind(this)} outline color="secondary" size="sm" block>
@@ -26,6 +26,6 @@ const ListUsers = props => (
 );
 
 export {
-    ListGroup,
-    ListUsers
+    Groups,
+    Users
 }

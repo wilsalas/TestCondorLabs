@@ -1,19 +1,22 @@
 //action to store the list of users
-const GetCountListUser = listUsers => {
-    return {
-        type: "COUNT_LIST_TO_USER",
-        listUsers
-    }
-}
+const Users = users => ({
+    type: "USERS",
+    users
+});
 //action to store the list of groups
-const ListGroups = listGroups => {
-    return {
-        type: "LIST_GROUPS",
-        listGroups
-    }
-}
+const Groups = groups => ({
+    type: "GROUPS",
+    groups
+});
+
+//action to get the name of the current group
+const GroupName = groupname =>({
+    type:"GROUP_NAME",
+    groupname
+});
 
 export {
-    GetCountListUser,
-    ListGroups
+    Users,
+    Groups,
+    GroupName
 }

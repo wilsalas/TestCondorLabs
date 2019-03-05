@@ -1,9 +1,7 @@
 import FetchData from './Fetch';
 import io from 'socket.io-client';
 import Store from './store/Store';
-import {
-    GetCountListUser, ListGroups
-} from './store/ActionCreators';
+import { Users, Groups, GroupName } from './store/ActionCreators';
 
 //start the connection of clients with server
 const socket = io('http://localhost:5000/');
@@ -16,14 +14,30 @@ if (localStorage.getItem("fakeAuth") !== null) {
             name: data.response.name,
             email: data.response.email,
             profile: data.response.profile
-        }))
+        }));
     });
     //get the list of groups in the client
-    socket.on("getgroups", data => Store.dispatch(ListGroups(data)));
+    socket.on("getgroups", data => Store.dispatch(Groups(data)));
     //fill the list of connected users and those who disconnect
-    socket.on('listusers', data => Store.dispatch(GetCountListUser(ConvertInfoUsers(data))));
+    socket.on('users', data => Store.dispatch(Users(ConvertInfoUsers(data))));
     //refresh the list with users that are disconnecting
-    socket.on('updatelistusers', data => Store.dispatch(GetCountListUser(ConvertInfoUsers(data))));
+    socket.on('updateusers', data => Store.dispatch(Users(ConvertInfoUsers(data))));
+
+    socket.on("updatelocalchat", data => {
+        Store.dispatch(GroupName(data.group));
+        socket.emit("askformessages", data.group)
+    });
+
+    socket.on("updatechat", data => {
+        console.log(data);
+
+    })
+
+    socket.on("loadmessages", data => {
+        console.log(data);
+
+    })
+
 
 }
 //get the information from a user's database
@@ -33,7 +47,7 @@ const NewGroup = (e = undefined, data = "") => {
     let infoNewGroup = undefined;
     if (data === "") {
         e.preventDefault();
-        infoNewGroup = { name: e.target.group.value }
+        infoNewGroup = { name: e.target.group.value };
     } else {
         infoNewGroup = data;
     }
@@ -41,6 +55,12 @@ const NewGroup = (e = undefined, data = "") => {
         data.status === 200 ? socket.emit("groupregister") : alert(data.message);
     });
 }
+//get the group change
+const SwitchGroup = data => socket.emit("switchgroup", data);
+
+const NewMessage = data => {
+}
+
 //convert a text string to a user object
 const ConvertInfoUsers = data => {
     let infoUser = [], dataUser = undefined;
@@ -57,7 +77,9 @@ const ConvertInfoUsers = data => {
 
 export default {
     GetDataUser,
-    NewGroup
+    NewGroup,
+    NewMessage,
+    SwitchGroup
 };
 
 
