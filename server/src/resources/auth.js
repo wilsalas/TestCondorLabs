@@ -14,7 +14,7 @@ passport.use("register", new LocalStrategy.Strategy({
     try {
         let user = await userModel.findOne().where({ email: emailPassport }).select('_id');
         if (!user) {
-            let newUser = new userModel;
+            let newUser = new userModel();
             newUser.name = req.body.name;
             newUser.email = emailPassport;
             newUser.password = newUser.encryptPassword(passwordPassport);

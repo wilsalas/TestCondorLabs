@@ -19,10 +19,10 @@ module.exports = io => {
             //send list user connected 
             io.sockets.emit('users', usersOnline);
             //send the group to the local chat
-            socket.emit('updatelocalchat', SendGroupName(`you have connected to ${socket.group}`, socket.group));
+            socket.emit('updatelocalchat', SendGroupName(200, `you have connected to ${socket.group}`, socket.group));
             // echo to group 1 that a person has connected to their group
             socket.broadcast.to(socket.group).emit('updatechat',
-                SendGroupName(`${socket.username} has connected to this group`, socket.group));
+                SendGroupName(409, `${socket.username} has connected to this group`, socket.group));
         })
         //bring the group list the first time
         GetGroup(io);
@@ -36,14 +36,14 @@ module.exports = io => {
             socket.join(newgroup);
             //send the group to the local chat
             socket.emit('updatelocalchat',
-                SendGroupName(`you have connected to ${newgroup}`, newgroup));
+                SendGroupName(200, `you have connected to ${newgroup}`, newgroup));
             //send a warning message to the previous group
             socket.broadcast.to(socket.group).emit('updatechat',
-                SendGroupName(`${socket.username} has left this group`, socket.group));
+                SendGroupName(400, `${socket.username} has left this group`, socket.group));
             // update socket session group title
             socket.group = newgroup;
             //send a warning message to the new group
-            socket.broadcast.to(socket.group).emit('updatechat', SendGroupName(`${socket.username} has joined this group`, socket.group));
+            socket.broadcast.to(socket.group).emit('updatechat', SendGroupName(409, `${socket.username} has joined this group`, socket.group));
         })
 
         //ask for messages and return the list of messages depending on the name of the group
@@ -62,7 +62,7 @@ module.exports = io => {
             // update list of users in chat, client-side
             io.sockets.emit('updateusers', usersOnline);
             // echo globally that this client has left
-            socket.broadcast.emit('updatechat', SendGroupName(`${socket.username} has disconnected`, socket.group));
+            socket.broadcast.emit('updatechat', SendGroupName(500, `${socket.username} has disconnected`, socket.group));
             socket.leave(socket.room);
         });
 
@@ -71,6 +71,6 @@ module.exports = io => {
     //get the list of groups
     const GetGroup = async io => io.sockets.emit("getgroups", await groupModel.find())
     //update customer chat
-    const SendGroupName = (message, group) => { return { message, group } }
+    const SendGroupName = (status, message, group) => { return { status, message, group } }
 
 }

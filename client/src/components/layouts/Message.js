@@ -8,7 +8,7 @@ export default props => (
     <div>
         <Row>
             <Col md={1}>
-                <img width="70" alt="img" className="rounded" src={props.data.profile} />
+                <img width="70" height="60" alt="img" className="rounded" src={props.data.profile} />
             </Col>
             <Col md={11}>
                 <span>

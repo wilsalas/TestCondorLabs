@@ -60,8 +60,6 @@ class Home extends Component {
 
 
     render() {
-
-
         return (
             <Container fluid>
                 {this.props.fakeAuth('private')}
@@ -70,7 +68,7 @@ class Home extends Component {
                         <br />
                         <Row>
                             <Col md={12}>
-                                <CardImg className="rounded" top width="100%" src={this.state.profile} alt="Card image cap" />
+                                <CardImg className="rounded" top width="100%" height="60" src={this.state.profile} alt="Card image cap" />
                                 <CardTitle>{this.state.name}</CardTitle>
                             </Col>
                             <Col md={12} className="columnBtns">
@@ -179,6 +177,7 @@ class Home extends Component {
                                 </Card>
                             </Col>
                             <Col md={12} >
+                                {/*Button that executes the action of sending messages */}
                                 <Input
                                     onChange={e => this.setState({ message: e.target.value })}
                                     type="textarea"

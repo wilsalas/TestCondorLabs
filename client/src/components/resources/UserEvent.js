@@ -1,4 +1,5 @@
 import FetchData from './Fetch';
+import Notifications from '../layouts/Notification';
 
 //register users
 const FormRegister = e => {
@@ -12,10 +13,9 @@ const FormRegister = e => {
         profile: profile.value
     }, 'post', data => {
         if (data.status === 200) {
-            alert(data.response);
             window.location.href = "/";
         } else {
-            alert(data.response);
+            Notifications(data.status, data.response);
         }
     });
 }
@@ -31,7 +31,11 @@ const FormUpdate = (e, id) => {
         gender: gender.value,
         profile: profile.value
     }, 'put', data => {
-        console.log(data);
+        if (data.status === 200) {
+            window.location.href = "/home";
+        } else {
+            Notifications(data.status, data.response);
+        }
     });
 }
 
@@ -47,7 +51,7 @@ const FormLogin = e => {
             localStorage.setItem('fakeAuth', btoa(data.response));
             window.location.href = "/home";
         } else {
-            alert(data.response);
+            Notifications(data.status, data.response);
         }
     });
 }

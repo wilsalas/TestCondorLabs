@@ -1,6 +1,7 @@
 import FetchData from './Fetch';
 import io from 'socket.io-client';
 import Store from './store/Store';
+import Notifications from '../layouts/Notification';
 import { Users, Groups, GroupName, LoadMessages } from './store/ActionCreators';
 
 //start the connection of clients with server
@@ -22,20 +23,18 @@ if (localStorage.getItem("fakeAuth") !== null) {
     socket.on('users', data => Store.dispatch(Users(ConvertInfoUsers(data))));
     //refresh the list with users that are disconnecting
     socket.on('updateusers', data => Store.dispatch(Users(ConvertInfoUsers(data))));
-
+    //local alert to load messages and send a message to the same customer
     socket.on("updatelocalchat", data => {
         Store.dispatch(GroupName(data.group));
         Askformessages(data.group);
+        Notifications(data.status, data.message)
     });
-
+    //alert people when there is a new status change in the chat
     socket.on("updatechat", data => {
-        console.log(data);
-
-    })
+        if (data.message !== undefined) Notifications(data.status, data.message)
+    });
     //loading messages app store
     socket.on("loadmessages", messages => Store.dispatch(LoadMessages(messages)));
-
-
 }
 //get the information from a user's database
 const GetDataUser = cb => FetchData("/auth/getusers", {}, "get", data => cb(data));
@@ -44,28 +43,29 @@ const NewGroup = (e = undefined, data = "") => {
     let infoNewGroup = undefined;
     if (data === "") {
         e.preventDefault();
-        infoNewGroup = { name: e.target.group.value };
+        infoNewGroup = { name: e.target.group.value || e.name };
     } else {
         infoNewGroup = data;
     }
     FetchData("/events/newgroup", infoNewGroup, "post", data => {
-        data.status === 200 ? socket.emit("groupregister") : alert(data.message);
+        socket.emit("groupregister")
+        Notifications(data.status, data.message);
     });
 }
 
 //get the group change
 const SwitchGroup = data => socket.emit("switchgroup", data);
-
+//ask for the message list
 const Askformessages = groupname => socket.emit("askformessages", groupname)
-
 //create a new message
 const NewMessage = data => {
     if (data.message !== "") {
         FetchData("/events/newmessage", data, "post", info => {
-            Askformessages(data.groupname)
+            Askformessages(data.groupname);
+            document.getElementsByName("message")[0].value = "";
         });
     } else {
-        alert("the message field can not be empty");
+        Notifications(406, "The message field can not be empty");
     }
 }
 

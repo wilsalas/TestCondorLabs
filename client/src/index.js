@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'react-notifications/lib/notifications.css';
 import App from './components/app/App';
 import Register from './components/register/Register';
 import Home from './components/home/Home';
+import { NotificationContainer } from 'react-notifications';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
@@ -11,15 +13,15 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 /*function authenticated app */
 const Authenticated = (type, session = localStorage.getItem('fakeAuth')) => {
     return type === 'public' && session !== null ? <Redirect to={'/home'} /> :
-           type === 'private' && session === null ? <Redirect to={'/'} /> :
-           type === 'compare' ? session : null;
+        type === 'private' && session === null ? <Redirect to={'/'} /> :
+            type === 'compare' ? session : null;
 }
 
 /*function logout app */
 const Logout = () => {
-    if(window.confirm("Are you sure you want to log out?")){
+    if (window.confirm("Are you sure you want to log out?")) {
         localStorage.removeItem('fakeAuth');
-        window.location.href="/";
+        window.location.href = "/";
     }
 }
 
@@ -33,6 +35,7 @@ const RouteProvider = ({ component: Component, ...objectPath }) => (
 ReactDOM.render(
     <Router>
         <div>
+            <NotificationContainer />
             <Switch>
                 <RouteProvider exact path='/' component={App} />
                 <RouteProvider path='/register' component={Register} />
