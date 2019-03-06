@@ -10,6 +10,7 @@ import Navigation from '../layouts/Navigation';
 import Message from '../layouts/Message';
 import NewGroup from '../layouts/NewGroup';
 import { Groups, Users } from '../layouts/View';
+import UserProfile from '../userprofile/UserProfile';
 
 class Home extends Component {
     constructor(props) {
@@ -19,14 +20,24 @@ class Home extends Component {
             name: "",
             email: "",
             profile: "",
+            gender: "",
             usersCount: 0,
             groupsCount: 1,
             users: [],
             groups: [],
             groupname: "",
             message: "",
-            messages: []
+            messages: [],
+            modal: false
         }
+        this.toggle = this.toggle.bind(this);
+    }
+
+    //active modal profile
+    toggle() {
+        this.setState(prevState => ({
+            modal: !prevState.modal
+        }));
     }
 
     componentDidMount() {
@@ -63,7 +74,7 @@ class Home extends Component {
                                 <CardTitle>{this.state.name}</CardTitle>
                             </Col>
                             <Col md={12} className="columnBtns">
-                                <Button outline color="secondary">
+                                <Button outline color="secondary" onClick={this.toggle}>
                                     <i className="fas fa-user-edit fa-2x"></i>
                                 </Button>
                             </Col>
@@ -138,7 +149,7 @@ class Home extends Component {
                                                 newgroup={() =>
                                                     data.email !== this.state.email ?
                                                         HomeEvent.NewGroup(undefined, {
-                                                            name: `(${this.state.name}-${data.name})`,
+                                                            name: `${this.state.name}-${data.name}`,
                                                             type: "Private",
                                                             relationship: {
                                                                 user1: this.state.email,
@@ -185,6 +196,13 @@ class Home extends Component {
                         </Row>
                     </Col>
                 </Row>
+                <UserProfile modal={this.state.modal} user={{
+                    _id: this.state._id,
+                    name: this.state.name,
+                    email: this.state.email,
+                    profile: this.state.profile,
+                    gender: this.state.gender
+                }} toggle={this.toggle}></UserProfile>
             </Container>
         );
     }

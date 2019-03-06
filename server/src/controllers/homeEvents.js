@@ -6,7 +6,7 @@ const { AuthenticateJWT } = require("../resources/auth"),
 const NewGroup = (req, res) => AuthenticateJWT(req, res, async () => {
     try {
         //Check if a record with the same group name already exists
-        if (await groupModel.countDocuments().where({ name: req.body.name }) < 1) {
+        if (await groupModel.countDocuments().where({ name: req.body.name }) < 1 && req.body.name!=="group1") {
             await new groupModel(req.body).save();
         }
         res.status(200).json({ status: 200, message: "new group created successfully" })

@@ -1,5 +1,6 @@
 const express = require("express"),
     app = express(),
+    cors = require("cors"),
     morgan = require("morgan"),
     http = require("http").Server(app),
     io = require("socket.io")(http),
@@ -12,6 +13,7 @@ require("./config/db");
 
 //middlewares
 require("./resources/auth");
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

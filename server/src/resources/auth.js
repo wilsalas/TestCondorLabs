@@ -56,7 +56,7 @@ passport.use('jwt', new Strategy({
     secretOrKey: process.env.SECRETKEY
 }, async (token, done) => {
     try {
-        let user = await userModel.findOne().where({ _id: token._id }).select("_id name email profile");
+        let user = await userModel.findOne().where({ _id: token._id });
         return done(...PassportDone(200, "", user ? user : false));
     } catch (err) {
         return done(...PassportDone(500, "An error has occurred try again please."));

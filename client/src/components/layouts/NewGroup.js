@@ -30,13 +30,13 @@ class NewGroup extends Component {
 
                 <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
                     <PopoverHeader>Create a new Group</PopoverHeader>
-                    <PopoverBody onMouseLeave={() => this.setState({ popoverOpen: false })}>
+                    <PopoverBody>
                         <Form onSubmit={this.props.newgroup.bind(this)}>
                             <FormGroup>
                                 <Input type="text" required name="group" placeholder="Title of the new group" />
                             </FormGroup>
                             <FormGroup>
-                                <Button size="lg" block outline color="success">Create</Button>
+                                <Button size="lg" block color="success">Create</Button>
                             </FormGroup>
                         </Form>
                     </PopoverBody>

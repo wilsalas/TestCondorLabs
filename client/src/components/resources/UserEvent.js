@@ -1,5 +1,6 @@
 import FetchData from './Fetch';
 
+//register users
 const FormRegister = e => {
     e.preventDefault();
     let { name, email, password, gender, profile } = e.target;
@@ -19,6 +20,22 @@ const FormRegister = e => {
     });
 }
 
+//update user data
+const FormUpdate = (e, id) => {
+    e.preventDefault();
+    let { name, email, password, gender, profile } = e.target;
+    FetchData(`/auth/update/${id}`, {
+        name: name.value,
+        email: email.value,
+        password: password.value,
+        gender: gender.value,
+        profile: profile.value
+    }, 'put', data => {
+        console.log(data);
+    });
+}
+
+//login for users
 const FormLogin = e => {
     e.preventDefault();
     let { email, password } = e.target;
@@ -38,5 +55,6 @@ const FormLogin = e => {
 
 export default {
     FormRegister,
-    FormLogin
+    FormLogin,
+    FormUpdate
 };
