@@ -62,7 +62,7 @@ module.exports = io => {
             // update list of users in chat, client-side
             io.sockets.emit('updateusers', usersOnline);
             // echo globally that this client has left
-            socket.broadcast.emit('updatechat', SendGroupName(500, `${socket.username} has disconnected`, socket.group));
+            socket.broadcast.emit('updatechat', SendGroupName(500, `${socket.username !== undefined ? socket.username : 'a user'} has disconnected`, socket.group));
             socket.leave(socket.room);
         });
 

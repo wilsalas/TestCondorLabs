@@ -68,7 +68,7 @@ class Home extends Component {
                         <br />
                         <Row>
                             <Col md={12}>
-                                <CardImg className="rounded" top width="100%" height="60" src={this.state.profile} alt="Card image cap" />
+                                <CardImg className="rounded" top width="100%" height="60%" src={this.state.profile} alt="Card image cap" />
                                 <CardTitle>{this.state.name}</CardTitle>
                             </Col>
                             <Col md={12} className="columnBtns">
@@ -109,14 +109,7 @@ class Home extends Component {
                                                     key={i}
                                                     data={data}>
                                                 </Groups>
-                                                : (data.relationship.user1 === this.state.email ||
-                                                    data.relationship.user2 === this.state.email) ?
-                                                    <Groups
-                                                        groupchange={() => HomeEvent.SwitchGroup(data.name)}
-                                                        key={i}
-                                                        data={data}>
-                                                    </Groups>
-                                                    : ""
+                                                : ""
                                         )}
                                     </Nav>
                                 </Card>
@@ -143,23 +136,21 @@ class Home extends Component {
                                     {/* send information of a new private group */}
                                     <Nav vertical >
                                         {this.state.users.map((data, i) => (
-                                            <Users key={i}
-                                                newgroup={() =>
-                                                    data.email !== this.state.email ?
-                                                        HomeEvent.NewGroup(undefined, {
-                                                            name: `${this.state.name}-${data.name}`,
-                                                            type: "Private",
-                                                            relationship: {
-                                                                user1: this.state.email,
-                                                                user2: data.email
-                                                            }
-                                                        }) : false
-                                                }
-                                                name={data.name}
-                                                email={data.email}
-                                                userActive={styles.userActive}
-                                            >
-                                            </Users>
+                                            data.email !== this.state.email ?
+                                                <Users key={i}
+                                                    newgroup={() => HomeEvent.NewGroup(undefined, {
+                                                        name: `${this.state.name}-${data.name}`,
+                                                        type: "Private",
+                                                        relationship: {
+                                                            user1: this.state.name,
+                                                            user2: data.name
+                                                        }
+                                                    })}
+                                                    name={data.name}
+                                                    email={data.email}
+                                                    userActive={styles.userActive}
+                                                >
+                                                </Users> : ""
                                         ))}
                                     </Nav>
                                 </Card>

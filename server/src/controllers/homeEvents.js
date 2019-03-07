@@ -5,18 +5,43 @@ const { AuthenticateJWT } = require("../resources/auth"),
 //It works to create new groups and add to the database
 const NewGroup = (req, res) => AuthenticateJWT(req, res, async () => {
     try {
-        //Check if a record with the same group name already exists
-        if (await groupModel.countDocuments().where({ name: req.body.name }) < 1 && req.body.name !== "group1") {
-            await new groupModel(req.body).save();
-            res.status(200).json({ status: 200, message: "New group created successfully" })
-        } else {
-            res.status(409).json({
-                status: 409,
-                message: "This group already exists"
-            })
+
+        if (req.body.name !== "group1" && req.body.type === "All") {
+            if (await groupModel.countDocuments().where({ name: req.body.name }) < 1) {
+                await new groupModel(req.body).save();
+                res.json({
+                    status: 409,
+                    message: "New group created successfully",
+                    groupname: req.body.name
+                });
+            } else {
+                res.json({
+                    status: 409,
+                    message: "This group already exists"
+                })
+            }
+        } else if (req.body.name !== "group1" && req.body.type === "Private") {
+            let group = await groupModel.findOne({
+                "$or": [
+                    {
+                        "name": `${req.body.relationship.user1}-${req.body.relationship.user2}`
+                    }, {
+                        "name": `${req.body.relationship.user2}-${req.body.relationship.user1}`
+                    }]
+            });
+            if (group !== null) {
+                res.json({ groupname: group.name })
+            } else {
+                await new groupModel(req.body).save();
+                res.json({
+                    status: 409,
+                    message: "New group created successfully",
+                    groupname: req.body.name
+                });
+            }
         }
     } catch (error) {
-        res.status(500).json({ status: 500, message: "An error has occurred try again please." });
+        res.status(500).json({ status: 500, message: "An error has occurred try again please." + error });
     }
 });
 

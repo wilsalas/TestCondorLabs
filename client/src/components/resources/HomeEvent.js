@@ -31,7 +31,7 @@ if (localStorage.getItem("fakeAuth") !== null) {
     });
     //alert people when there is a new status change in the chat
     socket.on("updatechat", data => {
-        if (data.message !== undefined) Notifications(data.status, data.message)
+        if (data.username !== null) Notifications(data.status, data.message)
     });
     //loading messages app store
     socket.on("loadmessages", messages => Store.dispatch(LoadMessages(messages)));
@@ -43,13 +43,18 @@ const NewGroup = (e = undefined, data = "") => {
     let infoNewGroup = undefined;
     if (data === "") {
         e.preventDefault();
-        infoNewGroup = { name: e.target.group.value || e.name };
+        infoNewGroup = { name: e.target.group.value, type: "All" };
     } else {
         infoNewGroup = data;
     }
     FetchData("/events/newgroup", infoNewGroup, "post", data => {
-        socket.emit("groupregister")
-        Notifications(data.status, data.message);
+        console.log(data);
+        //refresh group list
+        if (data.groupname !== undefined) {
+            socket.emit("groupregister");
+            SwitchGroup(data.groupname);
+        }
+        Notifications(data.status, data.message); 
     });
 }
 
