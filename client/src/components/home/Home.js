@@ -45,12 +45,14 @@ class Home extends Component {
         if (this.props.fakeAuth('compare')) {
             //fill list variables of users and groups
             HomeEvent.GetDataUser(data => this.setState(data.response));
+            let groupsNav = document.getElementsByClassName("groupsNav")[0].childElementCount === undefined ?
+                1 : document.getElementsByClassName("groupsNav")[0].childElementCount
             Store.subscribe(() => {
                 this.setState({
                     users: Store.getState().users,
                     usersCount: Store.getState().users.length,
                     groups: Store.getState().groups,
-                    groupsCount: document.getElementsByClassName("groupsNav")[0].childElementCount,
+                    groupsCount: groupsNav,
                     groupname: Store.getState().groupname,
                     messages: Store.getState().messages
                 });
@@ -136,14 +138,14 @@ class Home extends Component {
                                     {/* send information of a new private group */}
                                     <Nav vertical >
                                         {this.state.users.map((data, i) => (
-                                            data.email !== this.state.email ?
+                                            data._id !== this.state._id ?
                                                 <Users key={i}
                                                     newgroup={() => HomeEvent.NewGroup(undefined, {
-                                                        name: `${this.state.name}-${data.name}`,
+                                                        name: `${this.state._id}-${data._id}`,
                                                         type: "Private",
                                                         relationship: {
-                                                            user1: this.state.name,
-                                                            user2: data.name
+                                                            user1: this.state._id,
+                                                            user2: data._id
                                                         }
                                                     })}
                                                     name={data.name}

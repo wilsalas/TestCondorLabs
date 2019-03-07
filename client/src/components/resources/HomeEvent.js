@@ -12,6 +12,7 @@ if (localStorage.getItem("fakeAuth") !== null) {
     socket.on('connect', () => {
         //issue the new customer's data to the server
         GetDataUser(data => socket.emit('newuser', {
+            _id: data.response._id,
             name: data.response.name,
             email: data.response.email,
             profile: data.response.profile
@@ -54,7 +55,7 @@ const NewGroup = (e = undefined, data = "") => {
             socket.emit("groupregister");
             SwitchGroup(data.groupname);
         }
-        Notifications(data.status, data.message); 
+        Notifications(data.status, data.message);
     });
 }
 
@@ -80,9 +81,10 @@ const ConvertInfoUsers = data => {
     Object.values(data).forEach(info => {
         dataUser = info.split("-");
         infoUser.push({
-            name: dataUser[0],
-            email: dataUser[1],
-            profile: dataUser[2]
+            _id: dataUser[0],
+            name: dataUser[1],
+            email: dataUser[2],
+            profile: dataUser[3]
         });
     });
     return infoUser;

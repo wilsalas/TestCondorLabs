@@ -8,7 +8,7 @@ module.exports = io => {
         // when the client emits 'newuser', this listens and executes
         socket.on("newuser", data => {
             // store the data in the socket session for this client
-            socket.data = `${data.name}-${data.email}-${data.profile}`;
+            socket.data = `${data._id}-${data.name}-${data.email}-${data.profile}`;
             socket.username = data.name;
             // store the group name in the socket session for this client
             socket.group = 'group1';
