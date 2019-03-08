@@ -11,22 +11,27 @@ import {
 class Navigation extends Component {
     constructor(props) {
         super(props);
-
         this.toggle = this.toggle.bind(this);
         this.state = {
             isOpen: false
         };
+        this.typechat = "";
     }
     toggle() {
         this.setState({
             isOpen: !this.state.isOpen
         });
     }
+
+    componentWillUpdate() {
+        this.typechat = this.props.typechat;
+    }
+
     render() {
         return (
             <div>
                 <Navbar color="light" light expand="md">
-                    <h4>#{this.props.groupname}</h4>
+                    <h4>#{this.typechat === "All" ? this.props.groupname : 'Private conversation'}</h4>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
@@ -36,6 +41,10 @@ class Navigation extends Component {
                                     type="text"
                                     name="searchusers"
                                     placeholder="Search conversation"
+                                    onChange={(e) => this.props.AskformessagesIndividual({
+                                        groupname: this.props.groupname,
+                                        message: e.target.value
+                                    })}
                                 />
                             </NavItem>
                         </Nav>

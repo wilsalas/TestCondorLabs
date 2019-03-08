@@ -28,12 +28,12 @@ if (localStorage.getItem("fakeAuth") !== null) {
     socket.on("updatelocalchat", data => {
         Store.dispatch(GroupName(data.group));
         Askformessages(data.group);
-        Notifications(data.status, data.message)
+        if(data.status!==""){
+            Notifications(data.status, data.message)
+        }
     });
     //alert people when there is a new status change in the chat
-    socket.on("updatechat", data => {
-        if (data.username !== null) Notifications(data.status, data.message)
-    });
+    socket.on("updatechat", data => Notifications(data.status, data.message));
     //loading messages app store
     socket.on("loadmessages", messages => Store.dispatch(LoadMessages(messages)));
 }
@@ -61,8 +61,12 @@ const NewGroup = (e = undefined, data = "") => {
 
 //get the group change
 const SwitchGroup = data => socket.emit("switchgroup", data);
-//ask for the message list
+//Ask for global messages
 const Askformessages = groupname => socket.emit("askformessages", groupname)
+//Ask for individual messages
+const AskformessagesIndividual = ({ groupname, message }) => {
+    socket.emit("askformessages", message === "" ? groupname : { groupname, message })
+};
 //create a new message
 const NewMessage = data => {
     if (data.message !== "") {
@@ -94,7 +98,8 @@ export default {
     GetDataUser,
     NewGroup,
     NewMessage,
-    SwitchGroup
+    SwitchGroup,
+    AskformessagesIndividual
 };
 
 

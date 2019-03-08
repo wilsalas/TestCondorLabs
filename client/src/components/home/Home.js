@@ -28,7 +28,8 @@ class Home extends Component {
             groupname: "",
             message: "",
             messages: [],
-            modal: false
+            modal: false,
+            typechat: "All"
         }
         this.toggle = this.toggle.bind(this);
     }
@@ -45,14 +46,13 @@ class Home extends Component {
         if (this.props.fakeAuth('compare')) {
             //fill list variables of users and groups
             HomeEvent.GetDataUser(data => this.setState(data.response));
-            let groupsNav = document.getElementsByClassName("groupsNav")[0].childElementCount === undefined ?
-                1 : document.getElementsByClassName("groupsNav")[0].childElementCount
+
             Store.subscribe(() => {
                 this.setState({
                     users: Store.getState().users,
                     usersCount: Store.getState().users.length,
                     groups: Store.getState().groups,
-                    groupsCount: groupsNav,
+                    groupsCount: document.getElementsByClassName("groupsNav")[0].childElementCount,
                     groupname: Store.getState().groupname,
                     messages: Store.getState().messages
                 });
@@ -101,13 +101,19 @@ class Home extends Component {
                                     {/* check the list of public and private groups */}
                                     <Nav vertical className="groupsNav">
                                         <Groups
-                                            groupchange={() => HomeEvent.SwitchGroup("group1")}
+                                            groupchange={() => {
+                                                HomeEvent.SwitchGroup("group1")
+                                                this.setState({ typechat: "All" })
+                                            }}
                                             data={{ type: "All", name: "group1" }}>
                                         </Groups>
                                         {this.state.groups.map((data, i) =>
                                             data.type === "All" ?
                                                 <Groups
-                                                    groupchange={() => HomeEvent.SwitchGroup(data.name)}
+                                                    groupchange={() => {
+                                                        HomeEvent.SwitchGroup(data.name)
+                                                        this.setState({ typechat: "All" })
+                                                    }}
                                                     key={i}
                                                     data={data}>
                                                 </Groups>
@@ -140,14 +146,19 @@ class Home extends Component {
                                         {this.state.users.map((data, i) => (
                                             data._id !== this.state._id ?
                                                 <Users key={i}
-                                                    newgroup={() => HomeEvent.NewGroup(undefined, {
-                                                        name: `${this.state._id}-${data._id}`,
-                                                        type: "Private",
-                                                        relationship: {
-                                                            user1: this.state._id,
-                                                            user2: data._id
-                                                        }
-                                                    })}
+                                                    newgroup={() => {
+                                                        this.setState({ typechat: "Private" })
+                                                        /* send data to the server for the 
+                                                        creation of new private groups */
+                                                        HomeEvent.NewGroup(undefined, {
+                                                            name: `${this.state._id}-${data._id}`,
+                                                            type: "Private",
+                                                            relationship: {
+                                                                user1: this.state._id,
+                                                                user2: data._id
+                                                            }
+                                                        })
+                                                    }}
                                                     name={data.name}
                                                     email={data.email}
                                                     userActive={styles.userActive}
@@ -160,7 +171,10 @@ class Home extends Component {
                         </Row>
                     </Col>
                     <Col md={9}>
-                        <Navigation groupname={this.state.groupname}></Navigation>
+                        <Navigation
+                            groupname={this.state.groupname}
+                            typechat={this.state.typechat}
+                            AskformessagesIndividual={HomeEvent.AskformessagesIndividual.bind(this)}></Navigation>
                         <Row className="mt-1 mb-2">
                             <Col md={12} >
                                 <Card body className={styles.bodyContent}>
@@ -188,6 +202,7 @@ class Home extends Component {
                         </Row>
                     </Col>
                 </Row>
+                {/* send user information, to update your data */}
                 <UserProfile modal={this.state.modal} user={{
                     _id: this.state._id,
                     name: this.state.name,

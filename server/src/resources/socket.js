@@ -36,7 +36,7 @@ module.exports = io => {
             socket.join(newgroup);
             //send the group to the local chat
             socket.emit('updatelocalchat',
-                SendGroupName(200, `you have connected to ${newgroup}`, newgroup));
+                SendGroupName(newgroup.indexOf("-") < 0 ? 200 : '', `you have connected to ${newgroup}`, newgroup));
             //send a warning message to the previous group
             socket.broadcast.to(socket.group).emit('updatechat',
                 SendGroupName(400, `${socket.username} has left this group`, socket.group));
@@ -47,13 +47,19 @@ module.exports = io => {
         })
 
         //ask for messages and return the list of messages depending on the name of the group
-        socket.on("askformessages", async groupname =>
+        socket.on("askformessages", async data => {
             //issue messages only to those within the current group
-            io.sockets.in(groupname).emit("loadmessages",
+            if (data.message !== undefined && data.message !== "") {
+                return socket.emit(data.groupname).emit("loadmessages",
+                    await messageModel.find()
+                        .where({ groupname: data.groupname, message: { $regex: `.*${data.message}.*` } })
+                        .sort({ createdAt: -1 }))
+            }
+            return io.sockets.in(data).emit("loadmessages",
                 await messageModel.find()
-                    .where({ groupname })
+                    .where({ groupname: data })
                     .sort({ createdAt: -1 }))
-        );
+        });
 
         // when the user disconnects.. perform this
         socket.on('disconnect', () => {

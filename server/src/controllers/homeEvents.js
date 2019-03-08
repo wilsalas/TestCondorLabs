@@ -35,7 +35,7 @@ const NewGroup = (req, res) => AuthenticateJWT(req, res, async () => {
                 await new groupModel(req.body).save();
                 res.json({
                     status: 409,
-                    message: "New group created successfully",
+                    message: "New group private created successfully",
                     groupname: req.body.name
                 });
             }
