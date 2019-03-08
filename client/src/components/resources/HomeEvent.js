@@ -5,7 +5,7 @@ import Notifications from '../layouts/Notification';
 import { Users, Groups, GroupName, LoadMessages } from './store/ActionCreators';
 
 //start the connection of clients with server
-const socket = io('http://localhost:5000/');
+const socket = io('https://chatcondorlabs.herokuapp.com/');
 //check if a user has a defined session
 if (localStorage.getItem("fakeAuth") !== null) {
     // check that a customer has connected
