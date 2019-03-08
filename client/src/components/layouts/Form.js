@@ -27,7 +27,7 @@ export default props => (
                             {props.title !== "Login" &&
                                 <div>
                                     <FormGroup>
-                                        <Input type="url" name="profile" placeholder="Enter your url image" />
+                                        <Input type="url" name="profile" placeholder="Enter your url image" required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Input type="select" name="gender" required>
