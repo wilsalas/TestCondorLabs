@@ -10,7 +10,7 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 
-/*function authenticated app */
+/*function to authenticate users*/
 const Authenticated = (type, session = localStorage.getItem('fakeAuth')) => {
     return type === 'public' && session !== null ? <Redirect to={'/home'} /> :
         type === 'private' && session === null ? <Redirect to={'/'} /> :

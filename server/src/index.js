@@ -10,7 +10,6 @@ const express = require("express"),
 require("dotenv").config()
 require("./config/db");
 
-
 //middlewares
 require("./resources/auth");
 app.use(cors());
@@ -32,6 +31,5 @@ if (process.env.NODE_ENV === "production") {
         res.sendFile(path.join(__dirname, pathClient, "index.html"));
     });
 }
-
 //start server
 http.listen(process.env.PORT, () => console.log(`Server on port ${process.env.PORT}`));

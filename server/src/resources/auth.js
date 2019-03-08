@@ -10,7 +10,6 @@ passport.use("register", new LocalStrategy.Strategy({
     passwordField: 'password',
     passReqToCallback: true
 }, async (req, emailPassport, passwordPassport, done) => {
-
     try {
         let user = await userModel.findOne().where({ email: emailPassport }).select('_id');
         if (!user) {
@@ -39,10 +38,10 @@ passport.use('login', new LocalStrategy.Strategy({
     try {
         let user = await userModel.findOne().where({ email: emailPassport }).select('_id password');
         if (!user) {
-            return done(...PassportDone(404, "User not found."));
+            return done(...PassportDone(404, "User not found"));
         }
         if (!user.comparePassword(passwordPassport)) {
-            return done(...PassportDone(403, "Incorrect password."));
+            return done(...PassportDone(403, "Incorrect password"));
         }
         return done(...PassportDone(200, "", `Bearer ${jwt.sign({ _id: `${user._id}` }, process.env.SECRETKEY)}`));
     } catch (error) {

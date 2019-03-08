@@ -9,12 +9,12 @@ const { Schema, model } = require("mongoose"),
         createdAt: { type: Date, default: Date.now }
     });
 
-/**method encrypt password users */
+/**method to encrypt password users */
 userModel.methods.encryptPassword = passwordHash => {
     return bcrypt.hashSync(passwordHash, bcrypt.genSaltSync(10));
 }
 
-/**method compare password users */
+/**method to compare password users */
 userModel.methods.comparePassword = function (passwordCompare) {
     return bcrypt.compareSync(passwordCompare, this.password);
 }

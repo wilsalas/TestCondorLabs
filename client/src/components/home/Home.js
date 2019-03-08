@@ -46,7 +46,6 @@ class Home extends Component {
         if (this.props.fakeAuth('compare')) {
             //fill list variables of users and groups
             HomeEvent.GetDataUser(data => this.setState(data.response));
-
             Store.subscribe(() => {
                 this.setState({
                     users: Store.getState().users,
@@ -202,7 +201,7 @@ class Home extends Component {
                         </Row>
                     </Col>
                 </Row>
-                {/* send user information, to update your data */}
+                {/* send user information to update your data */}
                 <UserProfile modal={this.state.modal} user={{
                     _id: this.state._id,
                     name: this.state.name,

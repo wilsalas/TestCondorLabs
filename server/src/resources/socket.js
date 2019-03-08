@@ -14,13 +14,13 @@ module.exports = io => {
             socket.group = 'group1';
             // add the client's data to the global list
             usersOnline[socket.data] = socket.data;
-            // send client to group1
+            // send the client to group1
             socket.join(socket.group);
             //send list user connected 
             io.sockets.emit('users', usersOnline);
             //send the group to the local chat
             socket.emit('updatelocalchat', SendGroupName(200, `you have connected to ${socket.group}`, socket.group));
-            // echo to group 1 that a person has connected to their group
+            // send a message to the group that a new member has connected to that group
             socket.broadcast.to(socket.group).emit('updatechat',
                 SendGroupName(409, `${socket.username} has connected to this group`, socket.group));
         })
@@ -48,13 +48,14 @@ module.exports = io => {
 
         //ask for messages and return the list of messages depending on the name of the group
         socket.on("askformessages", async data => {
-            //issue messages only to those within the current group
+            /* search a conversation in the group without alerting other users */
             if (data.message !== undefined && data.message !== "") {
                 return socket.emit(data.groupname).emit("loadmessages",
                     await messageModel.find()
                         .where({ groupname: data.groupname, message: { $regex: `.*${data.message}.*` } })
                         .sort({ createdAt: -1 }))
             }
+            //send messages only to those within the current group
             return io.sockets.in(data).emit("loadmessages",
                 await messageModel.find()
                     .where({ groupname: data })
@@ -67,7 +68,7 @@ module.exports = io => {
             delete usersOnline[socket.data];
             // update list of users in chat, client-side
             io.sockets.emit('updateusers', usersOnline);
-            // echo globally that this client has left
+            // send globally that this client has left
             socket.broadcast.emit('updatechat', SendGroupName(500, `${socket.username !== undefined ? socket.username : 'a user'} has disconnected`, socket.group));
             socket.leave(socket.room);
         });

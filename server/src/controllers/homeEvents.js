@@ -5,7 +5,9 @@ const { AuthenticateJWT } = require("../resources/auth"),
 //It works to create new groups and add to the database
 const NewGroup = (req, res) => AuthenticateJWT(req, res, async () => {
     try {
-
+        /* function to verify a new public group
+            and compare if there is no record with the name of the group sent 
+        */
         if (req.body.name !== "group1" && req.body.type === "All") {
             if (await groupModel.countDocuments().where({ name: req.body.name }) < 1) {
                 await new groupModel(req.body).save();
@@ -20,6 +22,9 @@ const NewGroup = (req, res) => AuthenticateJWT(req, res, async () => {
                     message: "This group already exists"
                 })
             }
+            /* condition to verify if there is a private group or not, and if it exists, 
+            assign the client to that group if there is no private group 
+             */
         } else if (req.body.name !== "group1" && req.body.type === "Private") {
             let group = await groupModel.findOne({
                 "$or": [
@@ -45,6 +50,7 @@ const NewGroup = (req, res) => AuthenticateJWT(req, res, async () => {
     }
 });
 
+/* function to create a message */
 const NewMessage = (req, res) => AuthenticateJWT(req, res, async () => {
     try {
         await new messageModel(req.body).save();

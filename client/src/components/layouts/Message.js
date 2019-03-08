@@ -4,6 +4,7 @@ import {
 } from 'reactstrap';
 import moment from 'moment';
 
+/* component for loading messages */
 export default props => (
     <div>
         <Row>

@@ -23,10 +23,12 @@ class Navigation extends Component {
         });
     }
 
+    /* method for updating typechat */
     componentWillUpdate() {
         this.typechat = this.props.typechat;
     }
 
+    /* component of navigation */
     render() {
         return (
             <div>

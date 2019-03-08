@@ -1,9 +1,14 @@
 const { AuthenticateUser, AuthenticateJWT } = require("../resources/auth"),
     userModel = require("../models/users");
 
+/* control user registration */
 const RegisterUsers = (req, res) => AuthenticateUser("register", req, res);
+
+/* control user login */
 const LoginUsers = (req, res) => AuthenticateUser('login', req, res);
-const UpdateUsers = (req, res) => AuthenticateJWT(req, res, async data => {
+
+/* control the update of user data */
+const UpdateUsers = (req, res) => AuthenticateJWT(req, res, async () => {
     try {
         if (req.body.password !== "") {
             req.body.password = new userModel().encryptPassword(req.body.password);
@@ -16,6 +21,8 @@ const UpdateUsers = (req, res) => AuthenticateJWT(req, res, async data => {
         res.status(500).json({ status: 500, response: error });
     }
 });
+
+/* get user data */
 const GetDataUsers = (req, res) => AuthenticateJWT(req, res, async data => res.status(data.status).json(data));
 
 module.exports = {

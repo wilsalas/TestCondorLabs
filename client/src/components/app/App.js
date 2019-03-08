@@ -4,6 +4,7 @@ import UserEvent from '../resources/UserEvent';
 
 class App extends Component {
   render() {
+    /* component to login */
     return (
       <div className="L_R">
         {this.props.fakeAuth('public')}
