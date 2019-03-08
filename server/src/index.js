@@ -24,7 +24,7 @@ app.use(require("./routes/routes"));
 
 //deploy to server
 if (process.env.NODE_ENV === "production") {
-    let pathClient = "../client/build";
+    let pathClient = "../../client/build";
     // Serve any static files 
     app.use(express.static(path.join(__dirname, pathClient)));
     // Handle React routing, return all requests to React app
