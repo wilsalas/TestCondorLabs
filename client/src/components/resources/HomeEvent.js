@@ -49,7 +49,6 @@ const NewGroup = (e = undefined, data = "") => {
         infoNewGroup = data;
     }
     FetchData("/events/newgroup", infoNewGroup, "post", data => {
-        console.log(data);
         //refresh group list
         if (data.groupname !== undefined) {
             socket.emit("groupregister");
